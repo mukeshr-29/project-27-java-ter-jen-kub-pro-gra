@@ -53,16 +53,6 @@ pipeline{
                 sh 'trivy fs . > trivyfs.txt'
             }
         }
-        stage('docker scout file scan'){
-            steps{
-                script{
-                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){
-                        sh 'docker-scout quickview fs://.'
-                        sh 'docker-scout cves fs://.'
-                    }
-                }
-            }
-        }
         stage('docker build and push'){
             steps{
                 script{
