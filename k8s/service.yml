@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: youtube-service
+  labels:
+    app: youtube
+spec:
+  selector:
+    app: youtube
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer
+  

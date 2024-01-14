@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youtube-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: youtube
+  template:
+    metadata:
+      labels:
+        app: youtube
+    spec:
+      containers:
+      - name: youtube
+        image: mukeshr29/youtubeproject:latest
+        ports:
+        - containerPort: 3000
