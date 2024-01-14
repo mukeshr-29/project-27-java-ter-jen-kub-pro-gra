@@ -52,7 +52,7 @@ pipeline{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){
                         sh '''
-                            docker build -t mukeshr29/youtubeproject:latest .
+                            docker build -t mukeshr29/youtubeproject:latest a-youtube-clone-app/.
                             docker push mukeshr29/youtubeproject:latest
                         '''
                     }
