@@ -1,0 +1,51 @@
+pipeline{
+    agent any
+    tools{
+        jdk 'jdk17'
+        nodejs 'node16'
+    }
+    environment{
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages{
+        stage('clean workspace'){
+            steps{
+                cleanWs()
+            }
+        }
+        stage('git checkout'){
+            steps{
+                git 'https://github.com/mukeshr-29/project-27-java-ter-jen-kub-pro-gra.git'
+            }
+        }
+        stage('static code analysis'){
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonar-token' , installationName:'sonar-server'){
+                        sh '''
+                            $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=youtube-project \
+                            -Dsonar.projectName=youtube-project 
+                        '''
+                    }
+                }
+            }
+        }
+        stage('quality gate check'){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
+        stage('install dependencies'){
+            steps{
+                sh 'npm install'
+            }
+        }
+        steps('trivy filescan'){
+            steps{
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+    }
+}
